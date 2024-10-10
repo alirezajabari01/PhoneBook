@@ -3,13 +3,13 @@ using PhoneBook.Domain.Abstractions;
 
 namespace PhoneBook.Domain.Users.Contracts;
 
-public interface IUserRepository : IRepository,IScopeLifeTime
+public interface IUserRepository : IRepository, IScopeLifeTime
 {
-    public bool IsExist(Expression<Func<User, bool>> predicate);
-    public void Add(User user);
+    public Task<bool> IsExistAsync(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken);
+    public Task AddAsync(User user, CancellationToken cancellationToken);
     public void Delete(User user);
-    public void Save();
-    public void Update(User user);
-    public User? GetById(long id);
-    public User? Find(Expression<Func<User, bool>> predicate);
+    public Task SaveChangesAsync(CancellationToken cancellationToken);
+    public void Update(User user, CancellationToken cancellationToken);
+    public Task<User?> GetByIdAsync(long id, CancellationToken cancellationToken);
+    public Task<User?> SingleOrDefaultAsync(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken);
 }

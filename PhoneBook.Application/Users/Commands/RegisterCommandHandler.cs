@@ -9,6 +9,6 @@ public class RegisterCommandHandler(IAuthenticationService authenticationService
 {
     public async Task Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        await authenticationService.Register(request);
+        await authenticationService.Register(request, cancellationToken);
     }
 }

@@ -5,5 +5,5 @@ namespace PhoneBook.Application.Contract.Users.Contracts;
 
 public interface IAuthenticationService : IScopeLifeTime
 {
-    Task Register(RegisterCommand command);
+    Task Register(RegisterCommand command, CancellationToken cancellationToken);
 }

@@ -1,43 +1,33 @@
 ﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using PhoneBook.Domain.Users;
 using PhoneBook.Domain.Users.Contracts;
+using PhoneBook.Persistence.EF.Context;
 
 namespace PhoneBook.Persistence.EF.Users;
 
-public class UserRepository:IUserRepository
+public class UserRepository(PhoneBookContext phoneBookContext) : IUserRepository
 {
-    public bool IsExist(Expression<Func<User, bool>> predicate)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<bool> IsExistAsync(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken)
+        => await phoneBookContext.Set<User>().AnyAsync(predicate, cancellationToken);
 
-    public void Add(User user)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task AddAsync(User user, CancellationToken cancellationToken)
+        => await phoneBookContext.AddAsync(user, cancellationToken);
+
 
     public void Delete(User user)
-    {
-        throw new NotImplementedException();
-    }
+        =>  phoneBookContext.Remove(user);
 
-    public void Save()
-    {
-        throw new NotImplementedException();
-    }
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+        => await phoneBookContext.SaveChangesAsync(cancellationToken);
 
-    public void Update(User user)
-    {
-        throw new NotImplementedException();
-    }
+    public void Update(User user, CancellationToken cancellationToken)
+        => phoneBookContext.Set<User>().Update(user);
 
-    public User? GetById(long id)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<User?> GetByIdAsync(long id, CancellationToken cancellationToken)
+        => await phoneBookContext.FindAsync<User>(id, cancellationToken);
 
-    public User? Find(Expression<Func<User, bool>> predicate)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<User?> SingleOrDefaultAsync(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken)
+        => await phoneBookContext.Set<User>()
+            .SingleOrDefaultAsync(predicate, cancellationToken);
 }

@@ -4,6 +4,8 @@ using PhoneBook.Application;
 using PhoneBook.Application.Contract;
 using PhoneBook.Domain;
 using PhoneBook.Domain.Abstractions;
+using PhoneBook.Domain.Service.Users;
+using PhoneBook.Domain.Users.Contracts;
 using PhoneBook.MediatR;
 using PhoneBook.MediatR.Mediator;
 using PhoneBook.Persistence.EF;
@@ -39,9 +41,10 @@ public class AutofacModule : Module
             .AsClosedTypesOf(typeof(IBaseCommandHandler<>))  // Register all IRequestHandler implementations
             .InstancePerLifetimeScope();
         
-        // // Register MediatR services
-        // builder.RegisterAssemblyTypes(typeof(IMediator).Assembly)
-        //     .AsImplementedInterfaces();
+        builder.RegisterType<UserNameDuplicateChecker>()
+            .As<IUserNameDuplicateChecker>()
+            .InstancePerLifetimeScope(); // or another appropriate lifetime
+
         base.Load(builder);
     }
 }

@@ -4,5 +4,5 @@ namespace PhoneBook.Domain.Users.Contracts;
 
 public interface IUserNameDuplicateChecker : IScopeLifeTime
 {
-    bool IsUserNameDuplicate(string userName);
+    Task<bool> IsUserNameDuplicate(string userName,CancellationToken cancellationToken);
 }

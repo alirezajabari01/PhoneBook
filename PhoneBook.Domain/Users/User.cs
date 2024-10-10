@@ -13,7 +13,7 @@ namespace PhoneBook.Domain.Users
 
         public User(string userName, string password, IUserNameDuplicateChecker userNameDuplicateChecker)
         {
-            CheckUserDuplication(userNameDuplicateChecker, userName);
+            _ = CheckUserDuplication(userNameDuplicateChecker, userName);
             UserName = new(userName);
             Password = new(password);
         }
@@ -21,9 +21,10 @@ namespace PhoneBook.Domain.Users
         public UserName UserName { get; set; }
         public Password Password { get; set; }
 
-        private void CheckUserDuplication(IUserNameDuplicateChecker userNameDuplicateChecker, string userName)
+        private async Task CheckUserDuplication(IUserNameDuplicateChecker userNameDuplicateChecker, string userName)
         {
-            if (userNameDuplicateChecker.IsUserNameDuplicate(userName)) throw new DuplicateNameException();
+            if (await userNameDuplicateChecker.IsUserNameDuplicate(userName, CancellationToken.None))
+                throw new DuplicateNameException();
         }
 
 

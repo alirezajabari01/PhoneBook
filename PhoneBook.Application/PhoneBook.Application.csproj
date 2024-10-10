@@ -11,4 +11,9 @@
     <ProjectReference Include="..\PhoneBook.MediatR\PhoneBook.MediatR.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.35.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.35.0" />
+  </ItemGroup>
+
 </Project>

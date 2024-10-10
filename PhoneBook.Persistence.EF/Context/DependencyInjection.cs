@@ -9,8 +9,17 @@ public static class DependencyInjection
     {
         return service.AddDbContext<PhoneBookContext>
         (
-            options => options.UseNpgsql
-                ("User ID=postgres;Password=fwoWct6kLuqiBR9LKjqNsBEdjG7Wc1Vx;Server=70f31966-0447-494e-883d-449fcebed459.hsvc.ir;Port=30437;Database=PhoneBook;")
-        );
-    }
-}
+            options =>
+                 options.UseSqlServer
+                 (
+                     "Data Source=DESKTOP-G79AH4U;Initial Catalog=PhoneBook;Persist Security Info=True;User ID=sa;Password=Kiau@123%J;TrustServerCertificate=True"
+                 )
+         );
+ 
+         // return service.AddDbContext<PhoneBookContext>
+         // (
+         //     option =>
+         //         option.UseInMemoryDatabase("PhoneBook")
+         // );
+     }
+ }
