@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PhoneBook.Application.Contract\PhoneBook.Application.Contract.csproj" />
+    <ProjectReference Include="..\PhoneBook.MediatR\PhoneBook.MediatR.csproj" />
+  </ItemGroup>
+
 </Project>

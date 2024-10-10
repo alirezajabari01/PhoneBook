@@ -1,8 +1,11 @@
 using Autofac;
+using MediatR;
 using PhoneBook.Application;
 using PhoneBook.Application.Contract;
 using PhoneBook.Domain;
 using PhoneBook.Domain.Abstractions;
+using PhoneBook.MediatR;
+using PhoneBook.MediatR.Mediator;
 using PhoneBook.Persistence.EF;
 using Module = Autofac.Module;
 
@@ -17,6 +20,7 @@ public class AutofacModule : Module
         var applicationContractAssembly = typeof(IApplicationContractLayerMarker).Assembly;
         var domainAssembly = typeof(IDomainLayerMarker).Assembly;
         var domainServiceAssembly = typeof(IDomainLayerMarker).Assembly;
+        var mediatRServiceAssembly = typeof(IMediatRLayerMarker).Assembly;
 
         builder.RegisterAssemblyTypes
             (
@@ -24,12 +28,20 @@ public class AutofacModule : Module
                 persistenceAssembly,
                 applicationContractAssembly,
                 domainAssembly,
-                domainServiceAssembly
+                domainServiceAssembly,
+                mediatRServiceAssembly
             )
             .AssignableTo<IScopeLifeTime>()
             .AsImplementedInterfaces()
             .InstancePerLifetimeScope();
-
+        
+        builder.RegisterAssemblyTypes(applicationAssembly)
+            .AsClosedTypesOf(typeof(IBaseCommandHandler<>))  // Register all IRequestHandler implementations
+            .InstancePerLifetimeScope();
+        
+        // // Register MediatR services
+        // builder.RegisterAssemblyTypes(typeof(IMediator).Assembly)
+        //     .AsImplementedInterfaces();
         base.Load(builder);
     }
 }
