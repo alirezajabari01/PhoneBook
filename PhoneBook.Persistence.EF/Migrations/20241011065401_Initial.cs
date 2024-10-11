@@ -18,7 +18,7 @@ namespace PhoneBook.Persistence.EF.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserName = table.Column<string>(type: "NVarChar(32)", maxLength: 32, nullable: false),
                     Password = table.Column<string>(type: "NVarChar(150)", maxLength: 150, nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -35,7 +35,7 @@ namespace PhoneBook.Persistence.EF.Migrations
                     UserName = table.Column<string>(type: "NVarChar(32)", maxLength: 32, nullable: false),
                     PhoneNumber = table.Column<string>(type: "NVarChar(11)", maxLength: 11, nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

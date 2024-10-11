@@ -2,8 +2,11 @@ using Autofac;
 using MediatR;
 using PhoneBook.Application;
 using PhoneBook.Application.Contract;
+using PhoneBook.Application.UserFilters;
 using PhoneBook.Domain;
 using PhoneBook.Domain.Abstractions;
+using PhoneBook.Domain.PhoneBooks.Contracts;
+using PhoneBook.Domain.Service.PhoneBooks;
 using PhoneBook.Domain.Service.Users;
 using PhoneBook.Domain.Users.Contracts;
 using PhoneBook.MediatR;
@@ -35,6 +38,18 @@ public class AutofacModule : Module
             )
             .AssignableTo<IScopeLifeTime>()
             .AsImplementedInterfaces()
+            .InstancePerLifetimeScope();
+        
+        builder.RegisterType<UserContext>()
+            .As<IUserContext>()
+            .InstancePerLifetimeScope();
+        
+        builder.RegisterType<PhoneNumberDuplicateChecker>()
+            .As<IPhoneNumberDuplicateChecker>()
+            .InstancePerLifetimeScope();
+        
+        builder.RegisterType<PhoneBookUserNameDuplicateChecker>()
+            .As<IPhoneBookUserNameDuplicateChecker>()
             .InstancePerLifetimeScope();
         
         builder.RegisterAssemblyTypes(applicationAssembly)

@@ -12,7 +12,7 @@ using PhoneBook.Persistence.EF.Context;
 namespace PhoneBook.Persistence.EF.Migrations
 {
     [DbContext(typeof(PhoneBookContext))]
-    [Migration("20241010201147_Initial")]
+    [Migration("20241011065401_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -36,7 +36,7 @@ namespace PhoneBook.Persistence.EF.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeletedDate")
+                    b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("UserId")
@@ -58,7 +58,7 @@ namespace PhoneBook.Persistence.EF.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeletedDate")
+                    b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");

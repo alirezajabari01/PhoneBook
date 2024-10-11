@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq.Expressions;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PhoneBook.Domain.Abstractions;
@@ -17,14 +18,6 @@ public class PhoneBookContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Domain.PhoneBooks.PhoneBook> PhoneBooks { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.EnableSensitiveDataLogging()
-            .LogTo(Console.Error.WriteLine, LogLevel.Information);
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -32,9 +25,31 @@ public class PhoneBookContext : DbContext
         var assembly = typeof(IEntity).Assembly;
         var efAssembly = typeof(IPersistenceEfLayerMarker).Assembly;
 
+        FilterDeletedRecords(modelBuilder);
+
         RegisterEntities(modelBuilder, assembly);
 
         RegisterEntityTypeConfiguration(modelBuilder, efAssembly);
+    }
+
+    private static void FilterDeletedRecords(ModelBuilder modelBuilder)
+    {
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            // Check if the entity has the DeletedAt property
+            var deletedAtProperty = entityType.FindProperty("DeletedDate");
+            if (deletedAtProperty != null)
+            {
+                // Configure the query filter
+                var parameter = Expression.Parameter(entityType.ClrType);
+                var property = Expression.Property(parameter, "DeletedDate");
+                var filterExpression = Expression.Equal(property, Expression.Constant(null));
+
+                var lambdaExpression = Expression.Lambda(filterExpression, parameter);
+
+                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambdaExpression);
+            }
+        }
     }
 
     private static void RegisterEntities(ModelBuilder modelBuilder, params Assembly[] assemblies)

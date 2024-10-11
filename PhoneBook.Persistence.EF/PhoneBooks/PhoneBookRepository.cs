@@ -1,42 +1,24 @@
 ﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using PhoneBook.Domain.PhoneBooks.Contracts;
+using PhoneBook.Persistence.EF.Context;
 
 namespace PhoneBook.Persistence.EF.PhoneBooks;
 
-public class PhoneBookRepository : IPhoneBookRepository
+public class PhoneBookRepository(PhoneBookContext phoneBookContext) : IPhoneBookRepository
 {
     public bool IsExist(Expression<Func<Domain.PhoneBooks.PhoneBook, bool>> predicate)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Add(Domain.PhoneBooks.PhoneBook user)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Delete(Domain.PhoneBooks.PhoneBook user)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Save()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Update(Domain.PhoneBooks.PhoneBook user)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Domain.PhoneBooks.PhoneBook? GetById(long id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Domain.PhoneBooks.PhoneBook? Find(Expression<Func<Domain.PhoneBooks.PhoneBook, bool>> predicate)
-    {
-        throw new NotImplementedException();
-    }
+        => phoneBookContext.PhoneBooks.Any(predicate);
+    public void Add(Domain.PhoneBooks.PhoneBook phoneBook)
+        => phoneBookContext.PhoneBooks.Add(phoneBook);
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+        => await phoneBookContext.SaveChangesAsync(cancellationToken);
+    public void Update(Domain.PhoneBooks.PhoneBook phoneBook)
+        => phoneBookContext.PhoneBooks.Update(phoneBook);
+    public async Task<Domain.PhoneBooks.PhoneBook?> FindAsync
+    (Expression<Func<Domain.PhoneBooks.PhoneBook, bool>> predicate
+        , CancellationToken cancellationToken)
+        => await phoneBookContext.PhoneBooks.SingleOrDefaultAsync(predicate, cancellationToken);
+    public IQueryable<Domain.PhoneBooks.PhoneBook> GetQueryable()
+        => phoneBookContext.PhoneBooks;
 }

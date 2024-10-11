@@ -16,7 +16,7 @@ public class UserRepository(PhoneBookContext phoneBookContext) : IUserRepository
 
 
     public void Delete(User user)
-        =>  phoneBookContext.Remove(user);
+        => phoneBookContext.Remove(user);
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken)
         => await phoneBookContext.SaveChangesAsync(cancellationToken);
@@ -27,7 +27,9 @@ public class UserRepository(PhoneBookContext phoneBookContext) : IUserRepository
     public async Task<User?> GetByIdAsync(long id, CancellationToken cancellationToken)
         => await phoneBookContext.FindAsync<User>(id, cancellationToken);
 
-    public async Task<User?> SingleOrDefaultAsync(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken)
+    public async Task<User?> SingleOrDefaultAsync(Expression<Func<User, bool>> predicate,
+        CancellationToken cancellationToken)
         => await phoneBookContext.Set<User>()
-            .SingleOrDefaultAsync(predicate, cancellationToken);
+               .SingleOrDefaultAsync(predicate, cancellationToken)
+           ?? throw new NullReferenceException();
 }
